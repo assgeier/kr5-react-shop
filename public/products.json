@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "title": "Кофемашина Barista Home",
+    "category": "kitchen",
+    "price": 34990,
+    "rating": 4.8,
+    "isAvailable": true,
+    "image": "https://placehold.co/320x200?text=Barista+Home",
+    "description": "Автоматическая кофемашина для дома, 15 бар, капучинатор."
+  },
+  {
+    "id": 2,
+    "title": "Чайник электрический Kettle Pro",
+    "category": "kitchen",
+    "price": 2990,
+    "rating": 4.5,
+    "isAvailable": true,
+    "image": "https://placehold.co/320x200?text=Kettle+Pro",
+    "description": "Стеклянный чайник, 1.7 л, подсветка."
+  },
+  {
+    "id": 3,
+    "title": "Кофемолка GrindMaster",
+    "category": "kitchen",
+    "price": 5490,
+    "rating": 4.2,
+    "isAvailable": false,
+    "image": "https://placehold.co/320x200?text=GrindMaster",
+    "description": "Жерновая кофемолка, 12 степеней помола."
+  },
+  {
+    "id": 4,
+    "title": "Термокружка Travel Cup",
+    "category": "accessories",
+    "price": 1890,
+    "rating": 4.9,
+    "isAvailable": true,
+    "image": "https://placehold.co/320x200?text=Travel+Cup",
+    "description": "Держит тепло до 8 часов, объём 450 мл."
+  },
+  {
+    "id": 5,
+    "title": "Набор кофе в зёрнах",
+    "category": "coffee",
+    "price": 1290,
+    "rating": 4.7,
+    "isAvailable": true,
+    "image": "https://placehold.co/320x200?text=Coffee+Set",
+    "description": "Пробный набор: Бразилия, Колумбия, Эфиопия."
+  },
+  {
+    "id": 6,
+    "title": "Френч-пресс Classic 600",
+    "category": "accessories",
+    "price": 2190,
+    "rating": 4.3,
+    "isAvailable": false,
+    "image": "https://placehold.co/320x200?text=French+Press",
+    "description": "Стеклянный френч-пресс, 600 мл, металлический фильтр."
+  },
+  {
+    "id": 7,
+    "title": "Робот-пылесос CleanBot",
+    "category": "home",
+    "price": 24990,
+    "rating": 4.8,
+    "isAvailable": true,
+    "image": "https://placehold.co/320x200?text=CleanBot",
+    "description": "Робот-пылесос для ежедневной уборки квартиры."
+  },
+  {
+    "id": 8,
+    "title": "Умная лампа SmartLight",
+    "category": "home",
+    "price": 1590,
+    "rating": 4.1,
+    "isAvailable": true,
+    "image": "https://placehold.co/320x200?text=SmartLight",
+    "description": "Лампа с управлением со смартфона, 16 млн цветов."
+  }
+]
