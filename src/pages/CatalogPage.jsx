@@ -1,100 +1,85 @@
 import { useState, useEffect } from 'react';
+import { Typography, Alert, Button, Box, CircularProgress } from '@mui/material';
 import CatalogControls from '../components/CatalogControls.jsx';
 import ProductList from '../components/ProductList.jsx';
 import { getPreparedProducts } from '../utils/productUtils.js';
 import { getProducts } from '../api/productsApi.js';
 
 function CatalogPage() {
-    // Состояния для API
-    const [products, setProducts] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState('');
-    const [reloadKey, setReloadKey] = useState(0);
+  const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [reloadKey, setReloadKey] = useState(0);
 
-    // Состояния фильтров
-    const [searchQuery, setSearchQuery] = useState('');
-    const [selectedCategory, setSelectedCategory] = useState('all');
-    const [sortType, setSortType] = useState('default');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [sortType, setSortType] = useState('default');
 
-    // Загрузка данных
-    useEffect(() => {
-        const controller = new AbortController();
+  useEffect(() => {
+    const controller = new AbortController();
+    async function loadData() {
+      setIsLoading(true);
+      setError('');
+      try {
+        const data = await getProducts(controller.signal);
+        setProducts(data);
+      } catch (err) {
+        if (err.name === 'AbortError') return;
+        setError(err.message || 'Не удалось загрузить товары');
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    loadData();
+    return () => controller.abort();
+  }, [reloadKey]);
 
-        async function loadData() {
-            setIsLoading(true);
-            setError('');
+  const handleRetry = () => setReloadKey((prev) => prev + 1);
 
-            try {
-                const data = await getProducts(controller.signal);
-                setProducts(data);
-            } catch (err) {
-                if (err.name === 'AbortError') return; // Игнорируем отмену
-                setError(err.message || 'Не удалось загрузить товары');
-            } finally {
-                // В случае отмены finally может сработать при размонтировании
-                // Но React 18 безопасно обрабатывает setState после размонтирования
-                setIsLoading(false);
-            }
-        }
+  const categories = [...new Set(products.map((p) => p.category))];
+  const visibleProducts = getPreparedProducts(products, searchQuery, selectedCategory, sortType);
 
-        loadData();
+  return (
+    <Box>
+      <Typography variant="h4" component="h1" gutterBottom>
+        Каталог товаров
+      </Typography>
 
-        return () => {
-            controller.abort(); // Отмена при размонтировании
-        };
-    }, [reloadKey]);
+      {isLoading && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+          <CircularProgress />
+        </Box>
+      )}
 
-    // Повторная загрузка
-    const handleRetry = () => {
-        setReloadKey((prev) => prev + 1);
-    };
+      {error && (
+        <Alert 
+          severity="error" 
+          action={<Button color="inherit" size="small" onClick={handleRetry}>Повторить</Button>}
+          sx={{ mb: 3 }}
+        >
+          {error}
+        </Alert>
+      )}
 
-    // Уникальные категории
-    const categories = [...new Set(products.map((p) => p.category))];
-
-    // Вычисление видимых товаров
-    const visibleProducts = getPreparedProducts(
-        products,
-        searchQuery,
-        selectedCategory,
-        sortType
-    );
-
-    return (
-        <div className="catalog-page">
-            <h1>Каталог товаров</h1>
-
-            {/* 1. Состояние загрузки */}
-            {isLoading && <p className="status-message">Загрузка товаров...</p>}
-
-            {/* 2. Состояние ошибки */}
-            {error && (
-                <div className="error-message">
-                    <p>{error}</p>
-                    <button onClick={handleRetry}>Попробовать снова</button>
-                </div>
-            )}
-
-            {/* 3. Успешное состояние */}
-            {!isLoading && !error && (
-                <>
-                    <CatalogControls
-                        searchQuery={searchQuery}
-                        setSearchQuery={setSearchQuery}
-                        selectedCategory={selectedCategory}
-                        setSelectedCategory={setSelectedCategory}
-                        sortType={sortType}
-                        setSortType={setSortType}
-                        categories={categories}
-                    />
-
-                    <p className="catalog-count">Найдено товаров: {visibleProducts.length}</p>
-
-                    <ProductList products={visibleProducts} />
-                </>
-            )}
-        </div>
-    );
+      {!isLoading && !error && (
+        <>
+          <CatalogControls
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+            sortType={sortType}
+            setSortType={setSortType}
+            categories={categories}
+          />
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+            Найдено товаров: {visibleProducts.length}
+          </Typography>
+          <ProductList products={visibleProducts} />
+        </>
+      )}
+    </Box>
+  );
 }
 
 export default CatalogPage;

@@ -1,26 +1,55 @@
+import {
+  Card, CardContent, CardMedia, CardActions,
+  Typography, Chip, Button, Box
+} from '@mui/material';
+
 function formatPrice(price) {
   return `${price.toLocaleString('ru-RU')} руб.`;
 }
 
-// Добавляем onAdd в props
 function ProductCard({ product, onAdd }) {
   return (
-    <article className="product-card">
-      <img className="product-card__image" src={product.image} alt={product.title} />
-      <div className="product-card__body">
-        <span className="product-card__category">{product.category}</span>
-        <h3 className="product-card__title">{product.title}</h3>
-        <p className="product-card__description">{product.description}</p>
-        <div className="product-card__footer">
-          <span className="product-card__price">{formatPrice(product.price)}</span>
-          {/* Кнопка добавления */}
-          <button className="product-card__btn" onClick={() => onAdd(product)}>
-            Добавить
-          </button>
-        </div>
-      </div>
-    </article>
+    <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <CardMedia
+        component="img"
+        height="160"
+        image={product.image}
+        alt={product.title}
+        sx={{ objectFit: 'cover' }}
+      />
+      <CardContent sx={{ flexGrow: 1 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+          <Chip label={product.category} size="small" variant="outlined" />
+          <Chip 
+            label={product.isAvailable ? 'В наличии' : 'Нет в наличии'} 
+            size="small" 
+            color={product.isAvailable ? 'success' : 'error'} 
+          />
+        </Box>
+        
+        <Typography variant="h6" component="h3" gutterBottom>
+          {product.title}
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          {product.description}
+        </Typography>
+        <Typography variant="h6" color="primary.main">
+          {formatPrice(product.price)}
+        </Typography>
+      </CardContent>
+      <CardActions sx={{ p: 2, pt: 0 }}>
+        <Button 
+          fullWidth 
+          variant="contained" 
+          disableElevation
+          onClick={() => onAdd && onAdd(product)}
+          disabled={!product.isAvailable}
+        >
+          {product.isAvailable ? 'Добавить' : 'Нет в наличии'}
+        </Button>
+      </CardActions>
+    </Card>
   );
 }
 
-export default ProductCard;
+export default ProductCard; 

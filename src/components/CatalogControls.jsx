@@ -1,3 +1,5 @@
+import { TextField, FormControl, InputLabel, Select, MenuItem, Box } from '@mui/material';
+
 function CatalogControls({
   searchQuery, setSearchQuery,
   selectedCategory, setSelectedCategory,
@@ -5,42 +7,44 @@ function CatalogControls({
   categories
 }) {
   return (
-    <div className="catalog-controls">
-      {/* Поиск */}
-      <input
-        type="text"
-        placeholder="Поиск по названию..."
+    <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
+      <TextField
+        label="Поиск по названию"
+        variant="outlined"
+        size="small"
         value={searchQuery}
-        onChange={(event) => setSearchQuery(event.target.value)}
-        className="catalog-controls__input"
+        onChange={(e) => setSearchQuery(e.target.value)}
+        sx={{ flex: '1 1 200px' }}
       />
 
-      {/* Фильтр категорий */}
-      <select
-        value={selectedCategory}
-        onChange={(event) => setSelectedCategory(event.target.value)}
-        className="catalog-controls__select"
-      >
-        <option value="all">Все категории</option>
-        {categories.map((cat) => (
-          <option key={cat} value={cat}>
-            {cat}
-          </option>
-        ))}
-      </select>
+      <FormControl size="small" sx={{ minWidth: 160 }}>
+        <InputLabel>Категория</InputLabel>
+        <Select
+          value={selectedCategory}
+          label="Категория"
+          onChange={(e) => setSelectedCategory(e.target.value)}
+        >
+          <MenuItem value="all">Все категории</MenuItem>
+          {categories.map((cat) => (
+            <MenuItem key={cat} value={cat}>{cat}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
 
-      {/* Сортировка */}
-      <select
-        value={sortType}
-        onChange={(event) => setSortType(event.target.value)}
-        className="catalog-controls__select"
-      >
-        <option value="default">Без сортировки</option>
-        <option value="price-asc">Цена: по возрастанию</option>
-        <option value="price-desc">Цена: по убыванию</option>
-        <option value="title">По названию (А-Я)</option>
-      </select>
-    </div>
+      <FormControl size="small" sx={{ minWidth: 200 }}>
+        <InputLabel>Сортировка</InputLabel>
+        <Select
+          value={sortType}
+          label="Сортировка"
+          onChange={(e) => setSortType(e.target.value)}
+        >
+          <MenuItem value="default">Без сортировки</MenuItem>
+          <MenuItem value="price-asc">Цена: по возрастанию</MenuItem>
+          <MenuItem value="price-desc">Цена: по убыванию</MenuItem>
+          <MenuItem value="title">По названию (А-Я)</MenuItem>
+        </Select>
+      </FormControl>
+    </Box>
   );
 }
 
