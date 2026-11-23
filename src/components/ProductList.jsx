@@ -1,7 +1,7 @@
-import { Grid, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import ProductCard from './ProductCard.jsx';
 
-function ProductList({ products, onAdd }) {
+function ProductList({ products, onAddToCart }) {
   if (products.length === 0) {
     return (
       <Typography variant="h6" color="text.secondary" align="center" sx={{ py: 4 }}>
@@ -11,13 +11,18 @@ function ProductList({ products, onAdd }) {
   }
 
   return (
-    <Grid container spacing={3}>
+    <Box
+      sx={{
+        display: 'grid',
+        // Эта строка делает ячейки одинаковыми и адаптивными
+        gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+        gap: 3, // Отступы между карточками
+      }}
+    >
       {products.map((product) => (
-        <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
-          <ProductCard product={product} onAdd={onAdd} />
-        </Grid>
+        <ProductCard key={product.id} product={product} onAddToCart={onAddToCart} />
       ))}
-    </Grid>
+    </Box>
   );
 }
 

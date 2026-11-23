@@ -5,12 +5,11 @@ import ProductList from '../components/ProductList.jsx';
 import { getPreparedProducts } from '../utils/productUtils.js';
 import { getProducts } from '../api/productsApi.js';
 
-function CatalogPage() {
+function CatalogPage({ onAddToCart }) {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
   const [reloadKey, setReloadKey] = useState(0);
-
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortType, setSortType] = useState('default');
@@ -35,47 +34,27 @@ function CatalogPage() {
   }, [reloadKey]);
 
   const handleRetry = () => setReloadKey((prev) => prev + 1);
-
   const categories = [...new Set(products.map((p) => p.category))];
   const visibleProducts = getPreparedProducts(products, searchQuery, selectedCategory, sortType);
 
   return (
     <Box>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Каталог товаров
-      </Typography>
-
-      {isLoading && (
-        <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
-          <CircularProgress />
-        </Box>
-      )}
-
-      {error && (
-        <Alert 
-          severity="error" 
-          action={<Button color="inherit" size="small" onClick={handleRetry}>Повторить</Button>}
-          sx={{ mb: 3 }}
-        >
-          {error}
-        </Alert>
-      )}
-
+      <Typography variant="h4" component="h1" gutterBottom>Каталог товаров</Typography>
+      {isLoading && <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}><CircularProgress /></Box>}
+      {error && <Alert severity="error" action={<Button color="inherit" size="small" onClick={handleRetry}>Повторить</Button>} sx={{ mb: 3 }}>{error}</Alert>}
+      
       {!isLoading && !error && (
         <>
           <CatalogControls
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-            sortType={sortType}
-            setSortType={setSortType}
+            searchQuery={searchQuery} setSearchQuery={setSearchQuery}
+            selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory}
+            sortType={sortType} setSortType={setSortType}
             categories={categories}
           />
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
             Найдено товаров: {visibleProducts.length}
           </Typography>
-          <ProductList products={visibleProducts} />
+          <ProductList products={visibleProducts} onAddToCart={onAddToCart} />
         </>
       )}
     </Box>
