@@ -1,6 +1,5 @@
 import Header from './components/Header.jsx';
-import ProductList from './components/ProductList.jsx';
-import { products } from './data/products.js';
+import CatalogPage from './pages/CatalogPage.jsx';
 import './App.css';
 
 function App() {
@@ -8,10 +7,10 @@ function App() {
     <div className="app">
       <Header />
       <main className="app__main">
-        <ProductList products={products} />
+        <CatalogPage />
       </main>
       <footer className="site-footer">
-        <p>React Shop — учебный проект, практика №19</p>
+        <p>React Shop — учебный проект (Практика 20)</p>
       </footer>
     </div>
   );
