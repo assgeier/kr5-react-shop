@@ -1,35 +1,22 @@
-// Форматирование цены (обычная JS-функция, используется как выражение в JSX)
 function formatPrice(price) {
   return `${price.toLocaleString('ru-RU')} руб.`;
 }
 
-// Данные приходят через props (деструктуризация объекта product)
-function ProductCard({ product }) {
+// Добавляем onAdd в props
+function ProductCard({ product, onAdd }) {
   return (
     <article className="product-card">
-      <img
-        className="product-card__image"
-        src={product.image}
-        alt={product.title}
-        loading="lazy"
-      />
-
+      <img className="product-card__image" src={product.image} alt={product.title} />
       <div className="product-card__body">
         <span className="product-card__category">{product.category}</span>
         <h3 className="product-card__title">{product.title}</h3>
         <p className="product-card__description">{product.description}</p>
-
         <div className="product-card__footer">
           <span className="product-card__price">{formatPrice(product.price)}</span>
-          <span
-            className={
-              product.inStock
-                ? 'product-card__stock product-card__stock--in'
-                : 'product-card__stock product-card__stock--out'
-            }
-          >
-            {product.inStock ? 'В наличии' : 'Нет в наличии'}
-          </span>
+          {/* Кнопка добавления */}
+          <button className="product-card__btn" onClick={() => onAdd(product)}>
+            Добавить
+          </button>
         </div>
       </div>
     </article>
